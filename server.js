@@ -9,12 +9,37 @@ app.get('/', (req, res) => {
     res.send('Hello, World!');
 });
 
-app.get('/getTest/:param/test', (req, res) => {
+app.get('/getTest/:param/full', (req, res) => {
     res.send('Hello getTest<br><br>' + stringify(req, null, 2));
 });
 
-app.post('/postTest/:param/test', (req, res) => {
+app.post('/postTest/:param/full', (req, res) => {
     res.send('Hello postTest<br><br>' + stringify(req, null, 2));
+});
+
+function stringifyFiltered(req, res) {
+    const filteredObj = {
+        method: req.method,
+        url: req.originalUrl,
+        params: req.params,
+        query: req.query,
+        body: req.body,
+        headers: req.headers,
+        httpVersion: req.httpVersion,
+        ip: req.headers['x-forwarded-for'] || req.socket.remoteAddress,
+        route: req.route ? req.route.path : 'N/A',
+        statusCode: res.statusCode
+    };
+
+    return JSON.stringify(filteredObj, null, 2);
+}
+
+app.get('/getTest/:param', (req, res) => {
+    res.send('Hello getTest<br><br>' + stringifyFiltered(req, res));
+});
+
+app.post('/postTest/:param', (req, res) => {
+    res.send('Hello postTest<br><br>' + stringifyFiltered(req, res));
 });
 
 app.listen(PORT, () => {
