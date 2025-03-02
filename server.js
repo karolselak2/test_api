@@ -10,11 +10,13 @@ app.get('/', (req, res) => {
 });
 
 app.get('/getTest/:param/full', (req, res) => {
-    res.send('Hello getTest<br><br>' + formatJsonForHtml(stringify(req, null, 2)));
+    const responseContent = formatJsonForResponse(stringify(req, null, 2), req);
+    res.send(responseContent);
 });
 
 app.post('/postTest/:param/full', (req, res) => {
-    res.send('Hello postTest<br><br>' + formatJsonForHtml(stringify(req, null, 2)));
+    const responseContent = formatJsonForResponse(stringify(req, null, 2), req);
+    res.send(responseContent);
 });
 
 function stringifyFiltered(req, res) {
@@ -38,12 +40,22 @@ function formatJsonForHtml(jsonString) {
     return `<pre>${jsonString.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>`;
 }
 
+function formatJsonForResponse(jsonString, req) {
+    if (req.accepts('json')) {
+        return jsonString;
+    } else {
+        return formatJsonForHtml(jsonString);
+    }
+}
+
 app.get('/getTest/:param', (req, res) => {
-    res.send(`Hello getTest<br><br>${formatJsonForHtml(stringifyFiltered(req, res))}`);
+    const responseContent = formatJsonForResponse(stringifyFiltered(req, res), req);
+    res.send(responseContent);
 });
 
 app.post('/postTest/:param', (req, res) => {
-    res.send(`Hello postTest<br><br>${formatJsonForHtml(stringifyFiltered(req, res))}`);
+    const responseContent = formatJsonForResponse(stringifyFiltered(req, res), req);
+    res.send(responseContent);
 });
 
 app.listen(PORT, () => {
