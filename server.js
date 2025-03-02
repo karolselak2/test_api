@@ -7,11 +7,11 @@ app.get('/', (req, res) => {
 });
 
 app.get('/getTest/:param/test', (req, res) => {
-    res.send('Hello getTest\n\n' + JSON.stringify(req.params));
+    res.send('Hello getTest<br><br>' + JSON.stringify(req));
 });
 
 app.post('/postTest/:param/test', (req, res) => {
-    res.send('Hello postTest\n\n' + JSON.stringify(req.params));
+    res.send('Hello postTest<br><br>' + JSON.stringify(req));
 });
 
 app.listen(PORT, () => {
