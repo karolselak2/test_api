@@ -1,5 +1,5 @@
 const express = require('express');
-const { stringify } = require('flatted');
+const stringify = require('safe-stable-stringify');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -10,11 +10,11 @@ app.get('/', (req, res) => {
 });
 
 app.get('/getTest/:param/test', (req, res) => {
-    res.send('Hello getTest<br><br>' + stringify(req));
+    res.send('Hello getTest<br><br>' + stringify(req, null, 2));
 });
 
 app.post('/postTest/:param/test', (req, res) => {
-    res.send('Hello postTest<br><br>' + stringify(req));
+    res.send('Hello postTest<br><br>' + stringify(req, null, 2));
 });
 
 app.listen(PORT, () => {
