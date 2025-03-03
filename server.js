@@ -6,8 +6,14 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+let lastPostRequest = null; // Przechowuje dane ostatniego zapytania POST
+
 app.get('/', (req, res) => {
-    res.send('Hello, World!');
+    if (lastPostRequest) {
+        res.send(formatJsonForResponse(lastPostRequest, req));
+    } else {
+        res.send('Hello, World!');
+    }
 });
 
 app.get('/getTest/:param/full', (req, res) => {
@@ -16,7 +22,9 @@ app.get('/getTest/:param/full', (req, res) => {
 });
 
 app.post('/postTest/:param/full', (req, res) => {
-    const responseContent = formatJsonForResponse(stringify(req, null, 2), req);
+    const requestData = stringifyFiltered(req, res);
+    lastPostRequest = requestData;
+    const responseContent = formatJsonForResponse(requestData, req);
     res.send(responseContent);
 });
 
@@ -55,7 +63,9 @@ app.get('/getTest/:param', (req, res) => {
 });
 
 app.post('/postTest/:param', (req, res) => {
-    const responseContent = formatJsonForResponse(stringifyFiltered(req, res), req);
+    const requestData = stringifyFiltered(req, res);
+    lastPostRequest = requestData;
+    const responseContent = formatJsonForResponse(requestData, req);
     res.send(responseContent);
 });
 
