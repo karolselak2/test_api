@@ -54,10 +54,10 @@ function formatJsonForHtml(jsonString) {
 }
 
 function formatJsonForResponse(jsonString, req) {
-    if (req.accepts('json')) {
-        return jsonString;
-    } else {
+    if (req.accepts('html')) {
         return formatJsonForHtml(jsonString);
+    } else if (req.accepts('json')) {
+        return jsonString;        
     }
 }
 
