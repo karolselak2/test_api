@@ -9,10 +9,14 @@ app.use(express.urlencoded({ extended: true }));
 let lastPostRequest = null; // Przechowuje dane ostatniego zapytania POST
 
 app.get('/', (req, res) => {
+    res.send('Hello, World!');
+});
+
+app.get('/lastPostRequest', (req, res) => {
     if (lastPostRequest) {
         res.send(formatJsonForResponse(lastPostRequest, req));
     } else {
-        res.send('Hello, World!');
+        res.send('No saved post request');
     }
 });
 
